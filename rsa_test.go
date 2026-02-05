@@ -2,7 +2,7 @@ package ncrypto_test
 
 import (
 	"encoding/hex"
-	"github.com/smartwalle/ncrypto"
+	"github.com/llqhz/ncrypto"
 	"testing"
 )
 

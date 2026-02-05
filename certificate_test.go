@@ -1,7 +1,7 @@
 package ncrypto_test
 
 import (
-	"github.com/smartwalle/ncrypto"
+	"github.com/llqhz/ncrypto"
 	"testing"
 )
 
