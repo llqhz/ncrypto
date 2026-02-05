@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"crypto"
 	"crypto/ecdsa"
-	"crypto/ed25519"
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/base64"
@@ -15,11 +14,11 @@ import (
 
 type PrivateKey interface {
 	Public() crypto.PublicKey
-	Equal(crypto.PrivateKey) bool
+	// Equal(crypto.PrivateKey) bool
 }
 
 type PublicKey interface {
-	Equal(crypto.PublicKey) bool
+	// Equal(crypto.PublicKey) bool
 }
 
 type PrivateKeyDecoder []byte
@@ -74,11 +73,11 @@ func (p PKCS1PrivateKey) RSAPrivateKey() (*rsa.PrivateKey, error) {
 }
 
 type PKCS8PrivateKey struct {
-	key any
+	key interface{}
 	err error
 }
 
-func (p PKCS8PrivateKey) PrivateKey() (any, error) {
+func (p PKCS8PrivateKey) PrivateKey() (interface{}, error) {
 	return p.key, p.err
 }
 
@@ -100,17 +99,6 @@ func (p PKCS8PrivateKey) ECDSAPrivateKey() (*ecdsa.PrivateKey, error) {
 	privateKey, ok := p.key.(*ecdsa.PrivateKey)
 	if !ok {
 		return nil, errors.New("key is not a valid *ecdsa.PrivateKey")
-	}
-	return privateKey, nil
-}
-
-func (p PKCS8PrivateKey) ED25519PrivateKey() (*ed25519.PrivateKey, error) {
-	if p.err != nil {
-		return nil, p.err
-	}
-	privateKey, ok := p.key.(*ed25519.PrivateKey)
-	if !ok {
-		return nil, errors.New("key is not a valid *ed25519.PrivateKey")
 	}
 	return privateKey, nil
 }
@@ -164,11 +152,11 @@ func (p PKCS1PublicKey) RSAPublicKey() (*rsa.PublicKey, error) {
 }
 
 type PKIXPublicKey struct {
-	key any
+	key interface{}
 	err error
 }
 
-func (p PKIXPublicKey) PublicKey() (any, error) {
+func (p PKIXPublicKey) PublicKey() (interface{}, error) {
 	return p.key, p.err
 }
 
@@ -190,17 +178,6 @@ func (p PKIXPublicKey) ECDSAPublicKey() (*ecdsa.PublicKey, error) {
 	publicKey, ok := p.key.(*ecdsa.PublicKey)
 	if !ok {
 		return nil, errors.New("key is not a valid *ecdsa.PublicKey")
-	}
-	return publicKey, nil
-}
-
-func (p PKIXPublicKey) ED25519PublicKey() (*ed25519.PublicKey, error) {
-	if p.err != nil {
-		return nil, p.err
-	}
-	publicKey, ok := p.key.(*ed25519.PublicKey)
-	if !ok {
-		return nil, errors.New("key is not a valid *ed25519.PublicKey")
 	}
 	return publicKey, nil
 }
